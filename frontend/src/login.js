@@ -10,6 +10,8 @@ const Login = () => {
 
     const navigate = useNavigate();
     const { login } = useAuth();
+    const [loggedIn, setLoggedIn] = useState(false);
+    const [userEmail, setUserEmail] = useState("");
 
     // const validateForm = () => {
     //     let isValid = true;
@@ -73,8 +75,61 @@ const Login = () => {
         // Authentication calss wil be made ...
 
         login(email);
+
+        setLoggedIn(true);
+        setUserEmail(email);
         navigate("/")
+
+        // Check if email has an account associated with it
+
+        checkAccountExists(accountExists => {
+            if (accountExists)
+                logIn()
+            else
+                if (window.confirm("An account does not Exist with this email address: " + email + ". Do you want to create a new account ?")) {
+                    logIn()
+                }
+        })
     };
+
+    // Call the server API to check if the given email ID already exists
+
+    const checkAccountExists = (callback) => {
+        fetch("http://localhost:3080/check-account", {
+            method: "POST",
+            headers: {
+                'Content-Type':'application/json'
+            },
+            body: JSON.stringify({ email })
+        })
+        .then(r => r.json())
+        .then(r => {
+            callback(r?.userExists)
+        })
+    }
+
+    // Log in a user using email and password
+
+    const logIn = () => {
+        fetch("http://localhost:3080/auth", {
+            method: "POST",
+            headers: {
+                'Content-Type':'application/json'
+            },
+            body:JSON.stringify({email,password})
+        })
+        .then(r=>r.json())
+        .then(r => {
+            if ('success' === r.message) {
+                localStorage.setItem("user",JSON.stringify({email,token:r.token}))
+                setLoggedIn(true);
+                setEmail(email);
+                navigate("/");
+            } else {
+                window.alert("Wrong email or Password")
+            }
+        })
+    }
 
     return (<div className={"mainContainer"}>
         <div className={"titleContainer"}>

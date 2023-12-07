@@ -3,10 +3,16 @@ import { useNavigate } from "react-router-dom";
 // import { useAuth } from "./AuthContext";
 import { useAuth } from "./AuthContext";
 
+import { SignIn, SignedOut, SignInButton, SignOutButton,useUser } from "@clerk/clerk-react";
 
-const Home = () => {
+
+const Home = (props) => {
     const { loggedIn, email, logout } = useAuth();
     const navigate = useNavigate();
+
+    const { user } = useUser();
+
+    
 
     const onButtonClick = () => {
         if (loggedIn) {
@@ -14,6 +20,13 @@ const Home = () => {
         }
 
         else {
+            navigate("/login")
+        }
+
+        if (loggedIn) {
+            localStorage.removeItem("user")
+            props.setLoggedIn(false)
+        } else {
             navigate("/login")
         }
 
