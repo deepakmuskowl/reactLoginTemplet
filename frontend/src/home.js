@@ -3,14 +3,13 @@ import { useNavigate } from "react-router-dom";
 // import { useAuth } from "./AuthContext";
 import { useAuth } from "./AuthContext";
 
-import { SignIn, SignedOut, SignInButton, SignOutButton,useUser } from "@clerk/clerk-react";
+// import { SignedIn, SignedOut, SignInButton, SignOutButton,useUser } from "@clerk/clerk-react";
 
 
 const Home = (props) => {
     const { loggedIn, email, logout } = useAuth();
     const navigate = useNavigate();
 
-    const { user } = useUser();
 
     
 
@@ -39,11 +38,11 @@ const Home = (props) => {
         <div>
             This is the home page.
         </div>
-        {/* <div className={"buttonContainer"}>
+        <div className={"buttonContainer"}>
             <input className={"inputButton"} type="button" onClick={onButtonClick} value={loggedIn ? "Log out" : "Log in"} />
             {(loggedIn ? <div>Your email address is {email}
             </div> : <div/>)}
-        </div> */}
+        </div>
 
         <div>
             {loggedIn ? (
@@ -60,7 +59,11 @@ const Home = (props) => {
             )}
         </div>
     </div>
+        
+    
     );
 };
+
+
 
 export default Home;

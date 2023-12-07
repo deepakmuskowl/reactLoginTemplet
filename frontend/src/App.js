@@ -26,7 +26,7 @@ import {useEffect, useState } from 'react';
 
 
 
-const App = () => {
+const App = (props) => {
 
   useEffect(() => {
     //Fetch the user email and token from local storage
@@ -51,14 +51,13 @@ const App = () => {
 
       .then(r => r.json())
       .then(r => {
-        setLoggedIn('seccess' === r.message)
-        setEmail(user.email || "")
+        props.setLoggedIn('seccess' === r.message)
+        props.setEmail(user.email || "")
       })
 
 
 
-  }
-    , [])
+  },[])
 
   const [loggedIn, setLoggedIn] = useState(false)
   const [ email, setEmail ] = useState("")
